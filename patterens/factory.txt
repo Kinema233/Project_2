@@ -1,0 +1,40 @@
+public class Product
+{
+    public string Name { get; set; }
+    public double Cost { get; set; }
+
+    public Product(string name, double cost)
+    {
+        Name = name;
+        Cost = cost;
+    }
+}
+
+public class Pricecomparison : IComparer<Product>
+{
+    public int Compare(Product x, Product y)
+    {
+        return x.Cost.CompareTo(y.Cost);
+    }
+
+}
+
+public class ListProduct : IEnumerable<Product>
+{
+    private List<Product> products;
+    public ListProduct(List<Product> products)
+    {
+        this.products = products;
+        this.products.Sort(new Pricecomparison());
+    }
+
+    public IEnumerator<Product> GetEnumerator()
+    {
+        return products.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+}
