@@ -1,40 +1,49 @@
-public class Product
+namespace Test
 {
-    public string Name { get; set; }
-    public double Cost { get; set; }
-
-    public Product(string name, double cost)
+    public class Product : IComparable
     {
-        Name = name;
-        Cost = cost;
-    }
-}
+        public string Name { get; set; }
+        public double Weight { get; set; }
 
-public class Pricecomparison : IComparer<Product>
-{
-    public int Compare(Product x, Product y)
-    {
-        return x.Cost.CompareTo(y.Cost);
-    }
+        public Product(string name, double weight)
+        {
+            Name = name;
+            Weight = weight;
+        }
+        public int CompareTo(object obj)
+        {
+            if (obj == null) return 1;
 
-}
-
-public class ListProduct : IEnumerable<Product>
-{
-    private List<Product> products;
-    public ListProduct(List<Product> products)
-    {
-        this.products = products;
-        this.products.Sort(new Pricecomparison());
+            Product newproduct = obj as Product;
+            if (newproduct != null)
+                return this.Weight.CompareTo(newproduct.Weight);
+            else
+                throw new ArgumentException("Об'єкт не є виробом");
+        }
     }
 
-    public IEnumerator<Product> GetEnumerator()
+    public class Propgram
     {
-        return products.GetEnumerator();
-    }
+        static void Main()
+        {
+            Product[] mas = new Product[]
+            {
+                new Product("Тест1", 98),
+                new Product("Тест2", 85),
+                new Product("Тест3", 14),
+                new Product("Тест4", 12),
+                new Product("Тест5", 32),
+                new Product("Тест6", 66),
+                new Product("Тест7", 657),
+            };
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
+            Array.Sort(mas);
+
+            Console.WriteLine("Сортировка за весом");
+            foreach (var Product in mas)
+            {
+                Console.WriteLine($"{Product.Name}: {Product.Weight} кг");
+            }
+        }
     }
 }
