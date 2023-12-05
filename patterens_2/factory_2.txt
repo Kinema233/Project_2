@@ -1,0 +1,122 @@
+using System;
+using System.Collections.Generic;
+
+namespace lab7_4
+{
+    public class Product
+    {
+        public string Nama { get; set; }
+        public int Id { get; set; }
+
+        public Product(string name, int id)
+        {
+            Nama = name;
+            Id = id;
+        }
+
+        public string Name
+        {
+            get { return Nama; }
+            set { Name = value; }
+        }
+
+        public int ID
+        {
+            get { return Id; }
+            set { Id = value; }
+        }
+    }
+
+    public class GenericList<T> where T : Product
+    {
+        private class Node
+        {
+            private Node next;
+            private T data;
+
+            public Node(T t)
+            {
+                next = null;
+                data = t;
+            }
+
+            public Node Next
+            {
+                get { return next; }
+                set { next = value; }
+            }
+
+            public T Data
+            {
+                get { return data; }
+                set { data = value; }
+            }
+        }
+
+        private Node head;
+
+        public GenericList()
+        {
+            head = null;
+        }
+
+        public void AddHead(T t)
+        {
+            Node n = new Node(t);
+            n.Next = head;
+            head = n;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            Node current = head;
+            while (current != null)
+            {
+                yield return current.Data;
+                current = current.Next;
+            }
+        }
+
+        public T FindFirstOccurrence(string s)
+        {
+            Node current = head;
+            T t = default(T);
+
+            while (current != null)
+            {
+                if (current.Data.Name == s)
+                {
+                    t = current.Data;
+                    break;
+                }
+                else
+                {
+                    current = current.Next;
+                }
+            }
+
+            return t;
+        }
+    }
+
+    class Program
+    {
+        static void Main()
+        {
+            Product num1 = new Product("Кто-то1", 1);
+            Product num2 = new Product("Кто-то2", 2);
+            Product num3 = new Product("кто-то3", 3);
+
+            GenericList<Product> list = new GenericList<Product>();
+            list.AddHead(num1);
+            list.AddHead(num2);
+            list.AddHead(num3);
+
+            Console.WriteLine("Продукт в списке: ");
+            foreach (var t in list)
+            {
+                Console.WriteLine("Айди - " + t.ID + " " + "Имя - " + t.Name);
+            }
+        }
+    }
+}
